@@ -11,9 +11,11 @@ pub fn say_hello() {
 mod second {
     mod third {
         pub fn say_hello() {
+            // This calls the say_hello function from the crate's first module (absolute path)
             crate::first::say_hello(); 
 
-            super::super::say_hello(); // Call the say_hello function from the first module
+            // This calls the say_hello function from the parent module's parent (relative path)
+            super::super::say_hello();
             
         }
     }
