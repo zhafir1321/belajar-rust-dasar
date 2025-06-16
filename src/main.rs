@@ -985,3 +985,50 @@ fn test_can_say() {
     say_hello_goodbye(&person); // Passing a reference to the person instance to the say_hello_goodbye function
     println!("{}", person.say()); // Calling the say method on the person instance
 }
+
+struct Point<T> {
+    x: T, // Generic type parameter T for the x coordinate
+    y: T, // Generic type parameter T for the y coordinate
+}
+
+#[test]
+fn test_generic_struct() {
+    let point_i32: Point<i32> = Point { x: 10, y: 20 }; // Creating a Point with i32 type
+    println!("Point i32: ({}, {})", point_i32.x, point_i32.y);
+
+    let point_f64: Point<f64>  = Point { x: 1.5, y: 2.5 }; // Creating a Point with f64 type
+    println!("Point f64: ({}, {})", point_f64.x, point_f64.y);
+}
+
+enum Value<T> {
+    NONE,
+    VALUE(T)
+}
+
+#[test]
+fn test_generic_enum() {
+    let value_i32: Value<i32> = Value::<i32>::VALUE(42); // Creating a Value enum with i32 type
+    let value_f64: Value<f64> = Value::<f64>::VALUE(3.14); // Creating a Value enum with f64 type
+
+    match value_i32 {
+        Value::NONE => println!("No value"),
+        Value::VALUE(v) => println!("Value i32: {}", v),
+    }
+
+    match value_f64 {
+        Value::NONE => println!("No value"),
+        Value::VALUE(v) => println!("Value f64: {}", v),
+    }
+}
+
+struct Hi<T: CanSayGoodBye> {
+    value: T
+}
+
+#[test]
+fn test_generic_bound() {
+    let hi = Hi::<SimplePerson> {
+        value: SimplePerson { name: String::from("Zhafir") }
+    };
+    println!("{}", hi.value.name)
+}
