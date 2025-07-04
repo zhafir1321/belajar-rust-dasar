@@ -996,13 +996,13 @@ fn test_generic_struct() {
     let point_i32: Point<i32> = Point { x: 10, y: 20 }; // Creating a Point with i32 type
     println!("Point i32: ({}, {})", point_i32.x, point_i32.y);
 
-    let point_f64: Point<f64>  = Point { x: 1.5, y: 2.5 }; // Creating a Point with f64 type
+    let point_f64: Point<f64> = Point { x: 1.5, y: 2.5 }; // Creating a Point with f64 type
     println!("Point f64: ({}, {})", point_f64.x, point_f64.y);
 }
 
 enum Value<T> {
     NONE,
-    VALUE(T)
+    VALUE(T),
 }
 
 #[test]
@@ -1022,13 +1022,29 @@ fn test_generic_enum() {
 }
 
 struct Hi<T: CanSayGoodBye> {
-    value: T
+    value: T,
 }
 
 #[test]
 fn test_generic_bound() {
     let hi = Hi::<SimplePerson> {
-        value: SimplePerson { name: String::from("Zhafir") }
+        value: SimplePerson {
+            name: String::from("Zhafir"),
+        },
     };
     println!("{}", hi.value.name)
+}
+
+fn min<T: PartialOrd>(value1: T, value2: T) -> T {
+    // This function takes two values of type T and returns the minimum value
+    if value1 < value2 { value1 } else { value2 }
+}
+
+#[test]
+fn test_generic_function() {
+    let result = min::<i32>(10, 20); // Calling the min function with i32 type
+    println!("Minimum value (i32): {}", result);
+
+    let result = min(20.1, 10.5); // Calling the min function with f64 type, Rust infers the type
+    println!("Minimum value (f64): {}", result);
 }
