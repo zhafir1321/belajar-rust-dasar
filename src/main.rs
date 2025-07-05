@@ -991,6 +991,20 @@ struct Point<T> {
     y: T, // Generic type parameter T for the y coordinate
 }
 
+impl<T> Point<T> {
+
+    fn get_x(&self) -> &T {
+        // This method returns a reference to the x coordinate of the Point
+        &self.x
+    }
+
+    fn get_y(&self) -> &T {
+        // This method returns a reference to the y coordinate of the Point
+        &self.y
+    }
+
+}
+
 #[test]
 fn test_generic_struct() {
     let point_i32: Point<i32> = Point { x: 10, y: 20 }; // Creating a Point with i32 type
@@ -1047,4 +1061,50 @@ fn test_generic_function() {
 
     let result = min(20.1, 10.5); // Calling the min function with f64 type, Rust infers the type
     println!("Minimum value (f64): {}", result);
+}
+
+#[test]
+fn test_generic_method() {
+    let point = Point { x: 10, y: 20 }; // Creating a Point with i32 type
+    println!("Point x: {}, y: {}", point.get_x(), point.get_y()); // Calling the get_x and get_y methods
+
+    let point_f64 = Point { x: 1.5, y: 2.5 }; // Creating a Point with f64 type
+    println!("Point f64 x: {}, y: {}", point_f64.get_x(), point_f64.get_y()); // Calling the get_x and get_y methods
+
+    println!("Point x value: {}", point.get_value()); // Calling the get_value method to get the x coordinate
+}
+
+trait GetValue<T> {
+    fn get_value(&self) -> &T;
+}
+
+impl<T> GetValue<T> for Point<T> {
+    fn get_value(&self) -> &T {
+        &self.x // This method returns a reference to the x coordinate of the Point
+    }
+}
+
+use core::ops::Add; // Importing the Add trait to implement the `+` operator for the Apple struct
+
+struct Apple {
+    quantity: i32,
+}
+
+impl Add for Apple {
+    type Output = Apple; // Defining the output type of the addition operation
+
+    fn add(self, rhs: Self) -> Self::Output {
+        // Implementing the addition operation for Apple
+        Apple {
+            quantity: self.quantity + rhs.quantity, // Adding the quantities of the two Apple instances
+        }
+    }
+}
+
+#[test]
+fn test_operator_add() {
+    let apple1 = Apple {quantity: 5};
+    let apple2 = Apple {quantity: 10};
+    let result = apple1 + apple2; // Using the `+` operator to add two Apple instances
+    println!("Total quantity of apples: {}", result.quantity); // This will print the total quantity of apples after addition
 }
