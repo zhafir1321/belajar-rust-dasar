@@ -1201,3 +1201,75 @@ fn test_format() {
     println!("{:?}", category); // This will print the debug representation of the Category struct
     println!("{}", format!("{:?}", category)); // This will also print the debug representation of the Category struct
 }
+
+#[test]
+fn test_closure() {
+    let sum = |value1: i32, value2: i32| -> i32 {
+        // This is a closure that takes two i32 values and returns their sum
+        value1 + value2
+    };
+
+    let result = sum(10, 20); // Calling the closure with two i32 values
+    println!("Sum: {}", result); // This will print the result of the closure, which is 30
+}
+
+fn print_with_filter(value: String, filter: fn(String) -> String) {
+    let result = filter(value); // Applying the filter function to the value
+    println!("Filtered Value: {}", result); // This will print the filtered value
+}
+
+#[test]
+fn test_closure_as_parameter() {
+    print_with_filter(String::from("Zhafir"), |value: String| -> String {
+        value.to_uppercase() // This closure converts the input string to uppercase
+    });
+    let filter = |value: String| -> String {
+        value.to_lowercase() // This closure converts the input string to lowercase
+    };
+    print_with_filter(String::from("Rasyid"), filter); // Passing the closure as a parameter to the print_with_filter function
+}
+
+fn to_uppercase(value: String) -> String {
+    // This function takes a String and returns it in uppercase
+    value.to_uppercase()
+}
+
+#[test]
+fn test_function_as_closure() {
+    print_with_filter(String::from("Zhafir"), to_uppercase); // Passing a function as a closure to the print_with_filter function
+}
+
+#[test]
+fn test_closure_scope() {
+    let mut counter = 0;
+    let mut increment = || {
+        counter += 1; // Incrementing the counter variable
+        println!("Increment!"); // This will print the current value of the counter
+    };
+
+    increment(); // Calling the closure to increment the counter
+    increment(); // Calling the closure again to increment the counter
+    increment(); // Calling the closure again to increment the counter
+    println!("Counter: {}", counter); // This will print the final value of the counter, which is 3
+}
+
+struct Counter {
+    counter: i32,
+}
+
+impl Counter {
+    fn increment(&mut self) {
+        // This method increments the counter value
+        self.counter += 1;
+        println!("Increment!"); // This will print the current value of the counter
+    }
+}
+
+#[test]
+fn test_counter() {
+    let mut counter = Counter { counter: 0 }; // Creating an instance of Counter with initial value 0
+    counter.increment(); // Calling the increment method to increment the counter
+    counter.increment(); // Calling the increment method again to increment the counter
+    counter.increment(); // Calling the increment method again to increment the counter
+    println!("Counter: {}", counter.counter); // This will print the final value of the counter, which is 3
+}
