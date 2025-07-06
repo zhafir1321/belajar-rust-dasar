@@ -1159,3 +1159,19 @@ fn test_comparing() {
         None => println!("Cannot compare Apple 1 and Apple 2."),
     }
 }
+
+#[test]
+fn test_string_manipulation() {
+    let s = String::from("Zhafir Rasyid Muhammad Hafidz");
+    println!("{}", s.to_uppercase());
+    println!("{}", s.to_lowercase());
+    println!("{}", s.len()); // Prints the length of the string
+    println!("{}", s.is_empty()); // Checks if the string is empty
+    println!("{}", s.replace("Zhafir", "ZHAFIR")); // Replaces "Zhafir" with "ZHAFIR"
+    println!("{}", s.contains("Rasyid")); // Checks if the string contains "Rasyid"
+    println!("{}", s.starts_with("Zhafir")); // Checks if the string starts with "Zhafir"
+    println!("{}", s.ends_with("Hafidz")); // Checks if the string ends with "Hafidz"
+    println!("{}", s.trim()); // Trims whitespace from the beginning and end of the string
+    println!("{}", &s[0..3]); // Slicing the string to get the first three characters
+    println!("{:?}", s.get(0..3));
+}
