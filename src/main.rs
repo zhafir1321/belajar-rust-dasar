@@ -1108,3 +1108,54 @@ fn test_operator_add() {
     let result = apple1 + apple2; // Using the `+` operator to add two Apple instances
     println!("Total quantity of apples: {}", result.quantity); // This will print the total quantity of apples after addition
 }
+
+fn double(value: Option<i32>) -> Option<i32> {
+    // This function takes an Option<i32> and returns an Option<i32>
+    match value {
+        Some(v) => Some(v * 2), // If the value is Some, double it
+        None => None, // If the value is None, return None
+    }
+}
+
+#[test]
+fn test_option() {
+    let value1: Option<i32> = Some(10); // Creating an Option with a value
+    let value2: Option<i32> = None; // Creating an Option with no value
+
+    let result1 = double(value1); // Calling the double function with Some value
+    let result2 = double(value2); // Calling the double function with None value
+
+    println!("Result 1: {:?}", result1); // This will print Some(20)
+    println!("Result 2: {:?}", result2); // This will print None
+}
+
+impl PartialEq for Apple {
+    fn eq(&self, other: &Self) -> bool {
+        self.quantity == other.quantity // Implementing the equality check for Apple based on quantity
+    }
+}
+
+impl PartialOrd for Apple {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.quantity.partial_cmp(&other.quantity) // Implementing the partial comparison for Apple based on quantity
+    }
+}
+
+#[test]
+fn test_comparing() {
+    let apple1 = Apple { quantity: 5 };
+    let apple2 = Apple { quantity: 10 };
+
+    if apple1 == apple2 {
+        println!("Apple 1 and Apple 2 are equal.");
+    } else {
+        println!("Apple 1 and Apple 2 are not equal.");
+    }
+
+    match apple1.partial_cmp(&apple2) {
+        Some(std::cmp::Ordering::Less) => println!("Apple 1 is less than Apple 2."),
+        Some(std::cmp::Ordering::Greater) => println!("Apple 1 is greater than Apple 2."),
+        Some(std::cmp::Ordering::Equal) => println!("Apple 1 is equal to Apple 2."),
+        None => println!("Cannot compare Apple 1 and Apple 2."),
+    }
+}
