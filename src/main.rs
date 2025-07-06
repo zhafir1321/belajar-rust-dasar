@@ -1172,6 +1172,32 @@ fn test_string_manipulation() {
     println!("{}", s.starts_with("Zhafir")); // Checks if the string starts with "Zhafir"
     println!("{}", s.ends_with("Hafidz")); // Checks if the string ends with "Hafidz"
     println!("{}", s.trim()); // Trims whitespace from the beginning and end of the string
-    println!("{}", &s[0..3]); // Slicing the string to get the first three characters
+    println!("{:?}", &s[0..3]); // Slicing the string to get the first three characters
     println!("{:?}", s.get(0..3));
+}
+
+use std::fmt::{Debug, Formatter};
+struct Category {
+    id: String,
+    name: String,
+}
+
+impl Debug for Category {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Category")
+            .field("id", &self.id)
+            .field("name", &self.name)
+            .finish()
+    }
+}
+
+#[test]
+fn test_format() {
+    let category = Category {
+        id: String::from("1"),
+        name: String::from("Electronics"),
+    };
+    
+    println!("{:?}", category); // This will print the debug representation of the Category struct
+    println!("{}", format!("{:?}", category)); // This will also print the debug representation of the Category struct
 }
