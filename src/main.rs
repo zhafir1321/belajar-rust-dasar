@@ -1273,3 +1273,20 @@ fn test_counter() {
     counter.increment(); // Calling the increment method again to increment the counter
     println!("Counter: {}", counter.counter); // This will print the final value of the counter, which is 3
 }
+
+#[test]
+fn test_vector() {
+    let mut names: Vec<String> = Vec::new(); // Creating a new vector to store names
+    names.push(String::from("Zhafir")); // Adding a name to the vector
+    names.push(String::from("Rasyid")); // Adding another name to the vector
+    names.push(String::from("Muhammad")); // Adding another name to the vector
+    names.push(String::from("Hafidz")); // Adding another name to the vector
+
+    for name in &names {
+        // Iterating over the names in the vector
+        println!("Name: {}", name); // This will print each name in the vector
+    }
+
+    println!("{:?}", names); // This will print the debug representation of the vector
+}
+
