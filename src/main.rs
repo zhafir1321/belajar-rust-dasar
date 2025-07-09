@@ -1448,3 +1448,64 @@ fn test_iterator_method() {
     let odd: Vec<&i32> = vector.iter().filter(|x| *x % 2 != 0).collect(); // Using the filter method to get only odd values from the vector
     println!("Odd: {:?}", odd); // This will print the new vector with only odd values
 }
+
+fn connect_database(host: Option<String>) {
+    match host {
+        Some(h) => {
+            println!("Connected to database at host: {}", h); // This will print the host if it exists
+        }
+        None => {
+            panic!("No host provided, using default host."); // This will print if no host is provided
+        }
+    }
+}
+
+#[test]
+fn test_panic() {
+    connect_database(Some(String::from("localhost"))); // This will connect to the database with the provided host
+    connect_database(None); // This will panic because no host is provided
+}
+
+fn connect_cache(host: Option<String>) -> Result<String, String> {
+    match host {
+        Some(h) => Ok(format!("Connected to cache at host: {}", h)), // This will return Ok with the host if it exists
+        None => Err(String::from("No cache host provided!")), // This will return an error if no host is provided
+    }
+}
+
+#[test]
+fn test_recoverable_error() {
+    let cache = connect_cache(None); // This will connect to the cache with the provided host
+    match cache {
+        Ok(message) => println!("{}", message), // This will print the success message if the connection is successful
+        Err(e) => println!("Error: {}", e), // This will print the error message if the connection fails
+    }
+}
+
+fn connect_email(host: Option<String>) -> Result<String, String> {
+    match host {
+        Some(h) => Ok(format!("Connected to email server at host: {}", h)), // This will return Ok with the host if it exists
+        None => Err(String::from("No Email host Provided")), // This will return an error if no host is provided
+    }
+}
+
+fn connect_application(host: Option<String>) -> Result<String, String> {
+    connect_cache(host.clone())?; // Attempt to connect to the cache, if it fails, it will return an error
+    connect_email(host)?; // Attempt to connect to the email server, if it fails, it will return an error
+    Ok(String::from("Connected to application successfully!")) // If
+}
+
+#[test]
+fn test_questionmark_operator() {
+    let result = connect_application(Some(String::from("localhost"))); // Attempt to connect to the application with a host
+    match result {
+        Ok(message) => println!("{}", message), // If successful, print the success message
+        Err(e) => println!("Error: {}", e),     // If an error occurs, print the error message
+    }
+
+    let result2 = connect_application(None); // Attempt to connect to the application without a host
+    match result2 {
+        Ok(message) => println!("{}", message), // If successful, print the success message
+        Err(e) => println!("Error: {}", e),     // If an error occurs, print the error message
+    }
+}
