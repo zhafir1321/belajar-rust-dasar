@@ -1179,7 +1179,7 @@ fn test_string_manipulation() {
 }
 
 use std::{
-    collections::{BTreeMap, HashMap, LinkedList, VecDeque},
+    collections::{BTreeMap, HashMap, HashSet, LinkedList, VecDeque},
     fmt::{Debug, Formatter},
 };
 struct Category {
@@ -1329,6 +1329,8 @@ fn test_linked_list() {
 
 #[test]
 fn test_hash_map() {
+    // what is hash map?
+    // HashMap is a collection of key-value random sorted pairs, to make a fast
     let mut map: HashMap<String, String> = HashMap::new(); // Creating a new HashMap to store key-value pairs
     map.insert(
         String::from("name"),
@@ -1339,7 +1341,7 @@ fn test_hash_map() {
 
     let name = map.get("name"); // Getting the value associated with the key "name"
     println!("Name: {}", name.unwrap());
-    println!("{:?}", name); // This will print the value associated with the key "name" if it exists, or None if it does not
+    println!("{:?}", map); // This will print the value associated with the key "name" if it exists, or None if it does not
     match name {
         Some(value) => {
             println!("Name: {}", value); // This will print the value associated with the key "name"
@@ -1368,4 +1370,46 @@ fn test_btree_map() {
         println!("Key: {}, Value: {}", entry.0, entry.1); // This will print each key-value pair in the BTreeMap
     }
     println!("{:?}", map); // This will print the debug representation of the BTreeMap
+}
+
+#[test]
+fn test_hash_set() {
+    // the order will be random sort
+    let mut set: HashSet<String> = HashSet::new(); // Creating a new HashSet to store unique values
+    set.insert(String::from("Zhafir")); // Inserting a value into the HashSet
+    set.insert(String::from("Rasyid")); // Inserting another value into the HashSet
+    set.insert(String::from("Muhammad")); // Inserting another value into the HashSet
+    set.insert(String::from("Hafidz")); // Inserting another value into the HashSet
+    set.insert(String::from("Zhafir")); // Inserting a duplicate value into the HashSet (will not be added)
+    set.insert(String::from("Rasyid")); // Inserting a duplicate value into the HashSet (will not be added)
+    set.insert(String::from("Muhammad")); // Inserting a duplicate value into the HashSet (will not be added)
+    set.insert(String::from("Hafidz")); // Inserting a duplicate value into the HashSet (will not be added)
+
+    for value in &set {
+        // Iterating over the values in the HashSet
+        println!("Value: {}", value); // This will print each unique value in the HashSet
+    }
+    println!("{:?}", set); // This will print the debug representation of the HashSet
+}
+
+use std::collections::BTreeSet; // Importing BTreeSet to store unique values in sorted order
+
+#[test]
+fn test_btree_set() {
+    // the order will be sorted
+    let mut set: BTreeSet<String> = BTreeSet::new(); // Creating a new BTreeSet to store unique values in sorted order
+    set.insert(String::from("Zhafir")); // Inserting a value into the BTreeSet
+    set.insert(String::from("Rasyid")); // Inserting another value into the BTreeSet
+    set.insert(String::from("Muhammad")); // Inserting another value into the BTreeSet
+    set.insert(String::from("Hafidz")); // Inserting another value into the BTreeSet
+    set.insert(String::from("Zhafir")); // Inserting a duplicate value into the BTreeSet (will not be added)
+    set.insert(String::from("Rasyid")); // Inserting a duplicate value into the BTreeSet (will not be added)
+    set.insert(String::from("Muhammad")); // Inserting a duplicate value into the BTreeSet (will not be added)
+    set.insert(String::from("Hafidz")); // Inserting a duplicate value into the BTreeSet (will not be added)
+
+    for value in &set {
+        // Iterating over the values in the BTreeSet
+        println!("Value: {}", value); // This will print each unique value in the BTreeSet
+    }
+    println!("{:?}", set); // This will print the debug representation of the BTreeSet
 }
