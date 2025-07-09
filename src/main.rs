@@ -1179,7 +1179,7 @@ fn test_string_manipulation() {
 }
 
 use std::{
-    collections::{LinkedList, VecDeque},
+    collections::{BTreeMap, HashMap, LinkedList, VecDeque},
     fmt::{Debug, Formatter},
 };
 struct Category {
@@ -1327,3 +1327,45 @@ fn test_linked_list() {
     // println!("First Name: {}", names[0]); // Linked List does not support indexing like Vec or VecDeque, so this line will cause an error
 }
 
+#[test]
+fn test_hash_map() {
+    let mut map: HashMap<String, String> = HashMap::new(); // Creating a new HashMap to store key-value pairs
+    map.insert(
+        String::from("name"),
+        String::from("Zhafir Rasyid Muhammad Hafidz"),
+    ); // Inserting a key-value pair into the HashMap
+    map.insert(String::from("age"), String::from("25")); // Inserting another key-value pair into the HashMap
+    map.insert(String::from("city"), String::from("Jakarta")); // Inserting another key-value pair into the HashMap
+
+    let name = map.get("name"); // Getting the value associated with the key "name"
+    println!("Name: {}", name.unwrap());
+    println!("{:?}", name); // This will print the value associated with the key "name" if it exists, or None if it does not
+    match name {
+        Some(value) => {
+            println!("Name: {}", value); // This will print the value associated with the key "name"
+        }
+        None => {
+            println!("Name not found!"); // This will print if the key "name" does not exist in the HashMap
+        }
+    }
+}
+
+#[test]
+fn test_btree_map() {
+    // what is btree map?
+    // BTreeMap is a sorted map that maintains the order of keys based on their natural
+    let mut map: BTreeMap<String, String> = BTreeMap::new(); // Creating a new BTreeMap to store key-value pairs
+    map.insert(
+        String::from("name"),
+        String::from("Zhafir Rasyid Muhammad Hafidz"),
+    ); // Inserting a key-value pair into the BTreeMap
+    map.insert(String::from("age"), String::from("25")); // Inserting another key-value pair into the BTreeMap
+    map.insert(String::from("city"), String::from("Jakarta")); // Inserting another key-value pair into the BTreeMap
+    map.insert(String::from("country"), String::from("Indonesia")); // Inserting another key-value pair into the BTreeMap
+
+    for entry in &map {
+        // Iterating over the entries in the BTreeMap
+        println!("Key: {}, Value: {}", entry.0, entry.1); // This will print each key-value pair in the BTreeMap
+    }
+    println!("{:?}", map); // This will print the debug representation of the BTreeMap
+}
