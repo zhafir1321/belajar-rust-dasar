@@ -1181,6 +1181,7 @@ fn test_string_manipulation() {
 use std::{
     collections::{BTreeMap, HashMap, HashSet, LinkedList, VecDeque},
     fmt::{Debug, Formatter},
+    iter,
 };
 struct Category {
     id: String,
@@ -1412,4 +1413,38 @@ fn test_btree_set() {
         println!("Value: {}", value); // This will print each unique value in the BTreeSet
     }
     println!("{:?}", set); // This will print the debug representation of the BTreeSet
+}
+
+#[test]
+fn test_iterator() {
+    let array: [i32; 5] = [1, 2, 3, 4, 5]; // Creating an array of i32 values
+    let mut iterator = array.iter(); // Creating an iterator for the array
+
+    while let Some(value) = iterator.next() {
+        // Using a while let loop to iterate through the array
+        println!("Value: {}", value); // This will print each value in the array
+    }
+
+    for value in iterator {
+        // Using a for loop to iterate through the array
+        println!("Value: {}", value); // This will print each value in the array
+    }
+}
+
+#[test]
+fn test_iterator_method() {
+    let vector: Vec<i32> = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Creating a vector of i32 values
+    println!("{:?}", vector); // This will print the debug representation of the vector
+
+    let sum: i32 = vector.iter().sum(); // Using the sum method to calculate the sum of all elements in the vector
+    println!("Sum: {}", sum); // This will print the sum of all elements in the vector
+
+    let count: usize = vector.iter().count(); // Using the count method to count the number of elements in the vector
+    println!("Count: {}", count); // This will print the number of elements in the vector
+
+    let doubled: Vec<i32> = vector.iter().map(|x| x * 2).collect(); // Using the map method to double each element in the vector
+    println!("Doubled: {:?}", doubled); // This will print the new vector with doubled values
+
+    let odd: Vec<&i32> = vector.iter().filter(|x| *x % 2 != 0).collect(); // Using the filter method to get only odd values from the vector
+    println!("Odd: {:?}", odd); // This will print the new vector with only odd values
 }
