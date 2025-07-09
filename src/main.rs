@@ -992,7 +992,6 @@ struct Point<T> {
 }
 
 impl<T> Point<T> {
-
     fn get_x(&self) -> &T {
         // This method returns a reference to the x coordinate of the Point
         &self.x
@@ -1002,7 +1001,6 @@ impl<T> Point<T> {
         // This method returns a reference to the y coordinate of the Point
         &self.y
     }
-
 }
 
 #[test]
@@ -1069,7 +1067,11 @@ fn test_generic_method() {
     println!("Point x: {}, y: {}", point.get_x(), point.get_y()); // Calling the get_x and get_y methods
 
     let point_f64 = Point { x: 1.5, y: 2.5 }; // Creating a Point with f64 type
-    println!("Point f64 x: {}, y: {}", point_f64.get_x(), point_f64.get_y()); // Calling the get_x and get_y methods
+    println!(
+        "Point f64 x: {}, y: {}",
+        point_f64.get_x(),
+        point_f64.get_y()
+    ); // Calling the get_x and get_y methods
 
     println!("Point x value: {}", point.get_value()); // Calling the get_value method to get the x coordinate
 }
@@ -1103,8 +1105,8 @@ impl Add for Apple {
 
 #[test]
 fn test_operator_add() {
-    let apple1 = Apple {quantity: 5};
-    let apple2 = Apple {quantity: 10};
+    let apple1 = Apple { quantity: 5 };
+    let apple2 = Apple { quantity: 10 };
     let result = apple1 + apple2; // Using the `+` operator to add two Apple instances
     println!("Total quantity of apples: {}", result.quantity); // This will print the total quantity of apples after addition
 }
@@ -1113,7 +1115,7 @@ fn double(value: Option<i32>) -> Option<i32> {
     // This function takes an Option<i32> and returns an Option<i32>
     match value {
         Some(v) => Some(v * 2), // If the value is Some, double it
-        None => None, // If the value is None, return None
+        None => None,           // If the value is None, return None
     }
 }
 
@@ -1176,7 +1178,10 @@ fn test_string_manipulation() {
     println!("{:?}", s.get(0..3));
 }
 
-use std::fmt::{Debug, Formatter};
+use std::{
+    collections::{LinkedList, VecDeque},
+    fmt::{Debug, Formatter},
+};
 struct Category {
     id: String,
     name: String,
@@ -1197,7 +1202,7 @@ fn test_format() {
         id: String::from("1"),
         name: String::from("Electronics"),
     };
-    
+
     println!("{:?}", category); // This will print the debug representation of the Category struct
     println!("{}", format!("{:?}", category)); // This will also print the debug representation of the Category struct
 }
@@ -1288,5 +1293,37 @@ fn test_vector() {
     }
 
     println!("{:?}", names); // This will print the debug representation of the vector
+}
+
+#[test]
+fn test_vec_deque() {
+    let mut names: VecDeque<String> = VecDeque::<String>::new(); // Creating a new VecDeque to store names
+    names.push_back(String::from("Rasyid")); // Adding a name to the back of the VecDeque
+    names.push_back(String::from("Muhammad")); // Adding another name to the back of the VecDeque
+    names.push_back(String::from("Hafidz")); // Adding another name to the back of the VecDeque
+    names.push_front(String::from("Zhafir")); // Adding a name to the front of the VecDeque
+
+    for name in &names {
+        // Iterating over the names in the VecDeque
+        println!("Name: {}", name); // This will print each name in the VecDeque
+    }
+    println!("{:?}", names); // This will print the debug representation of the VecDeque
+    println!("First Name: {}", names[0]); // This will print the first name
+}
+
+#[test]
+fn test_linked_list() {
+    let mut names: LinkedList<String> = LinkedList::<String>::new(); // Creating a new LinkedList to store names
+    names.push_back(String::from("Rasyid")); // Adding a name to the back
+    names.push_back(String::from("Muhammad")); // Adding another name to the back
+    names.push_back(String::from("Hafidz")); // Adding another name to the back
+    names.push_front(String::from("Zhafir")); // Adding a name to the front
+
+    for name in &names {
+        // Iterating over the names in the LinkedList
+        println!("Name: {}", name); // This will print each name in the LinkedList
+    }
+    println!("{:?}", names); // This will print the debug representation of the LinkedList
+    // println!("First Name: {}", names[0]); // Linked List does not support indexing like Vec or VecDeque, so this line will cause an error
 }
 
