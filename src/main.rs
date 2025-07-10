@@ -1622,3 +1622,31 @@ fn test_lifetime_annotation_generic() {
     println!("Teacher ID: {}", teacher.id); // This will print the ID of the teacher
     println!("Teacher Name: {}", teacher.name); // This will print the name of the teacher
 }
+
+#[derive(Debug, PartialEq, PartialOrd)] // Deriving the Debug trait to enable printing the struct
+struct Company {
+    name: String,     // The name of the company
+    location: String, // The location of the company
+    website: String,  // The website of the company
+}
+
+#[test]
+fn test_attribute_derive() {
+    let company = Company {
+        name: "Zhafir Rasyid Muhammad Hafidz".to_string(), // Creating a Company instance with a name
+        location: "Jakarta".to_string(),                   // Assigning a location to the company
+        website: "https://example.com".to_string(),        // Assigning a website to the company
+    };
+
+    let company2 = Company {
+        name: "Zhafir Rasyid Muhammad Hafidz".to_string(), // Creating another Company instance with the same name
+        location: "Jakarta".to_string(), // Assigning the same location to the company
+        website: "https://example.com".to_string(), // Assigning the same website to the company
+    };
+
+    println!("{:?}", company); // This will print the debug representation of the Company struct
+
+    let result = company == company2; // Comparing two Company instances for equality
+
+    println!("Are the companies equal? {}", result); // This will print true if the companies are equal, false otherwise
+}
