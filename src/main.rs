@@ -1509,3 +1509,116 @@ fn test_questionmark_operator() {
         Err(e) => println!("Error: {}", e),     // If an error occurs, print the error message
     }
 }
+
+#[test]
+fn test_dangling_reference() {
+    let r: &i32;
+    {
+        let x = 42; // Creating a variable x with a value of 42
+        // r = &x; // Assigning a reference to x to r
+        // println!("Value of r: {}", r); // This will print the value of r, which is 42
+    }
+    r = &40; // Reassigning r to a new value, which is valid because x is no longer in scope
+    // println!("Value of r after x goes out of scope: {}", r); // This line would cause a compile-time error because x is out of scope
+    println!("Value of r after reassignment: {}", r); // This will print the new value of r, which is 40
+}
+
+fn longest<'a>(value1: &'a str, value2: &'a str) -> &'a str {
+    // This function takes two string slices with the same lifetime 'a and returns the longer one
+    // The lifetime 'a ensures that the returned reference is valid as long as both input references
+    // are valid, preventing dangling references
+    if value1.len() > value2.len() {
+        value1
+    } else {
+        value2
+    }
+}
+
+#[test]
+fn test_lifetime_annotation() {
+    let value1 = "Zhafir";
+    let value2 = "Rasyid Muhammad Hafidz";
+    let result = longest(value1, value2); // Calling the longest function with two string slices
+    println!("Longest value: {}", result); // This will print the longer string slice between
+}
+
+#[test]
+fn test_lifetime_annotation_dangling_reference() {
+    let string1 = String::from("Zhafir Rasyid Muhammad Hafidz");
+    let result;
+    let string2 = String::from("Rasyid Muhammad Hafidz");
+    {
+        // The lifetime of string2 is limited to this block, so we cannot return a reference to it
+        // result = longest(&string1, &string2); // This line would cause a compile-time error because string2 goes out of scope here
+        result = longest(string1.as_str(), string2.as_str()); // Calling the longest function with string slices
+    }
+    println!("Longest value: {}", result); // This will print the longer string slice
+}
+
+struct Student<'a> {
+    name: &'a str, // The lifetime 'a ensures that the name reference is valid as long as the Student instance is valid
+    last_name: &'a str, // The lifetime 'a ensures that the last_name reference is valid as long as the Student instance is valid
+}
+
+fn longest_student_name<'a>(student1: &Student<'a>, student2: &Student<'a>) -> &'a str {
+    // This function takes two Student instances and returns the one with the longer name
+    if student1.name.len() > student2.name.len() {
+        student1.name // If student1's name is longer, return student1
+    } else {
+        student2.name // Otherwise, return student2
+    }
+}
+
+impl<'a> Student<'a> {
+    fn longest_name(&self, student: &Student<'a>) -> &'a str {
+        // This method takes another Student instance and returns the longer name between self and other
+        if self.name.len() > student.name.len() {
+            self.name // If self's name is longer, return self's name
+        } else {
+            student.name // Otherwise, return other name
+        }
+    }
+}
+
+#[test]
+fn test_student() {
+    let student = Student {
+        name: "Zhafir Rasyid",
+        last_name: "Muhammad Hafidz",
+    };
+    println!("First Name: {}", student.name); // This will print the name of the student
+    println!("Last Name: {}", student.last_name); // This will print the last name of
+
+    let student1 = Student {
+        name: "Zhafir Rasyid",
+        last_name: "Muhammad Hafidz",
+    };
+    let student2 = Student {
+        name: "Rasyid",
+        last_name: "Muhammad Hafidz",
+    };
+    let result = longest_student_name(&student1, &student2); // Calling the longest_student_name function with two Student instances
+    println!("Longest student name: {}", result); // This will print the longer name between the two students
+
+    let result2 = student.longest_name(&student2); // Calling the longest_name method on the student instance
+    println!("Longest name between student and student2: {}", result2); // This will print
+}
+
+struct Teacher<'a, ID>
+where
+    ID: Ord,
+{
+    id: ID,        // The ID type parameter can be any type that implements the Ord trait
+    name: &'a str, // The lifetime 'a ensures that the name reference is valid as long as the Teacher instance is valid
+}
+
+#[test]
+fn test_lifetime_annotation_generic() {
+    let teacher: Teacher<i32> = Teacher {
+        id: 1,                                 // Creating a Teacher instance with an i32 ID
+        name: "Zhafir Rasyid Muhammad Hafidz", // Assigning a name to the teacher
+    };
+
+    println!("Teacher ID: {}", teacher.id); // This will print the ID of the teacher
+    println!("Teacher Name: {}", teacher.name); // This will print the name of the teacher
+}
