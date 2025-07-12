@@ -1650,3 +1650,49 @@ fn test_attribute_derive() {
 
     println!("Are the companies equal? {}", result); // This will print true if the companies are equal, false otherwise
 }
+
+/* 
+
+Smart Pointer Box<T>
+Reference = Pointer
+Smart Pointer = tipe data pointer namun memiliki metadata dan sebagai penunjuk ke lokasi data (memori)
+
+Sebagian besar, reference hanya MEMINJAM data dari owner,
+sedangkan smart pointer merupakan pemilik dari data yang ditunjuk alias ownernya sendiri
+
+*/
+
+#[test]
+fn test_smart_pointer() {
+    let value: Box<i32> = Box::new(10);
+    println!("{}", value);
+    display_number(*value);
+    display_number_reference(&value);
+}
+
+fn display_number(value: i32) {
+    println!("Dari Display Number fn {}", value)
+}
+
+fn display_number_reference(value: &i32) {
+    println!("Dari Display Number Reference fn {}", value)
+}
+
+#[derive(Debug)]
+enum ProductCategory {
+    Of(String, Box<ProductCategory>),
+    End
+}
+
+#[test]
+fn test_box_enum() {
+    let category = ProductCategory::Of(
+        "Laptop".to_string(), 
+        Box::new(ProductCategory::Of(
+            "Dell".to_string(), 
+            Box::new(ProductCategory::End)
+        ))
+    );
+
+    println!("{:?}", category);
+}
