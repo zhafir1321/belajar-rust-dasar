@@ -1905,3 +1905,61 @@ fn test_unsafe() {
         println!("Counter: {}", counter_value);
     }
 }
+
+/**
+ * MACRO
+ *
+ * Sebelumnya, kita sudah sering menggunakan println!, itu bukanlah function, melainkan Macro
+ * Macro adalah fitur di Rust yang merupakan kode untuk membuat kode lainnya, di bahasa pemrograman lain, sering disebut Metaprogramming
+ * Kelebihan Macro adalah, kita bisa membuat kode yang kita mau sebelum Compiler melakukan kompilasi
+ * Kekurangan Macro adalah, implementasi Macro lebih kompleks dibanding implementasi function biasa
+ *
+ * DECLARATIVE MACRO
+ * Salah satu cara yang umum dilakukan untuk membuat Macro adalah Declarative Macro menggunakan macro_rules!
+ * Saat membuat Macro menggunakan macro_rules!, kita akan tentukan rule yang berisi (pattern) => {expansion}
+ * Pattern merupakan kondisi yang diinginkan, dan expansion merupakan kode yang akan dibuat oleh Macro
+ *
+ * REPETITION
+ * Kadang, saat membuat Macro, kita butuh parameter lebih dari satu, atau di Macro disebut Repetition
+ * Ketika menggunakan Macro, kita bisa gunakan $() diikuti dengan koma, lalu Repetition Operator
+ * *, artinya boleh berapapun
+ * +, artinya boleh berapapun, tapi minimal satu
+ * ?, artinya boleh satu atau kosong, sehingga tidak perlu pemisah koma
+ */
+
+macro_rules! hi_macro {
+    () => {
+        println!("Hi Macros!")
+    };
+    ($name: expr) => {
+        println!("Hi {}!", $name)
+    };
+}
+
+#[test]
+fn test_macro() {
+    hi_macro!();
+    hi_macro!("Zhafir");
+    hi_macro! {
+        "Hafidz"
+    }
+}
+
+macro_rules! iterates {
+    ($array: expr) => {
+        for i in $array {
+            println!("Ini dari array: {}", i);
+        }
+    };
+    ($($item: expr), *) => {
+        $(
+            println!("Ini repetition: {}", $item);
+        )*
+    }
+}
+
+#[test]
+fn test_macro_iterates() {
+    iterates!([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    iterates!(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+}
