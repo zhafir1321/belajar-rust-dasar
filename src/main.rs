@@ -1181,7 +1181,7 @@ fn test_string_manipulation() {
 use std::{
     collections::{BTreeMap, HashMap, HashSet, LinkedList, VecDeque},
     fmt::{Debug, Formatter},
-    iter,
+    iter, ops::Deref,
 };
 struct Category {
     id: String,
@@ -1696,3 +1696,95 @@ fn test_box_enum() {
 
     println!("{:?}", category);
 }
+
+
+/**
+ * DEREFERENCE
+ * 
+ * Saat kita menggunakan Reference, kadang kita ingin melakukan manipulasi data langsung ke value nya
+ * Kita bisa melakukan Dereference untuk mengakses langsung value-nya, bukan lagi Reference-nya
+ * Untuk melakukan Dereference, kita bisa menggunakan operator *
+ */
+
+#[test]
+fn test_dereference() {
+    let value1 = Box::new(10);
+    let value2 = Box::new(20);
+
+    let result = *value1 * *value2;
+    println!("{}", result)
+}
+
+/**
+ * DEREF TRAIT
+ * 
+ * Saat kita menggunakan Reference atau Box<T>, kita bisa menggunakan * Operator untuk melakukan Dereference
+ * Bagaimana jika kita menggunakan tipe lain? Misal struct yang kita buat sendiri?
+ * Secara default, kita tidak bisa menggunakan Dereference
+ * Namun, jika kita ingin membuat struct yang kita buat memiliki kemampuan Dereference, kita bisa menggunakan Deref Trait
+ * Khusus untuk Mutable Value, kita juga bisa menggunakan DerefMut
+ */
+
+ struct MyValue<T> {
+    value: T
+ }
+
+ impl<T> Deref for MyValue<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self.value
+    }
+
+ }
+
+#[test]
+fn test_derefence_struct() {
+    let value = MyValue {value: 10};
+    let real_value = *value;
+
+    println!("{}", real_value)
+}
+
+/**
+ * DEREF PARAMETER
+ * 
+ * Deref juga bisa digunakan untuk Parameter yang secara otomatis melakukan Reference ke value yang ditunjuk pada implementasi yang kita buat
+ * Misal sebelumnya kita membuat MyValue<String>, lalu misal kita ingin mengirim ke function dengan parameter &String
+ * Kita bisa langsung menggunakan &my_value
+ */
+
+ fn say_hello_reference(name: &String) {
+    println!("Hello {}", name)
+ }
+
+ #[test]
+ fn test_deref_reference() {
+     let name = MyValue {value: "Zhafir Rasyid Muhammad Hafidz".to_string()};
+
+     say_hello_reference(&name);
+ }
+
+/**
+ * DROP TRAIT
+ * 
+ * Saat kita membuat value, ketika value tersebut keluar dari scope, secara otomatis value akan didrop (hapus) oleh Rust
+ * Drop Trait merupakan Trait yang bisa kita implementasikan, untuk membuat kode yang akan dieksekusi sebelum value didrop
+ * Misal menutup koneksi, resource dan lain lain
+ */
+
+ struct Book {
+    title: String
+ }
+
+ impl Drop for Book {
+    fn drop(&mut self) {
+        println!("Dropping book: {}", self.title);
+    }
+ }
+
+ #[test]
+ fn test_drop() {
+     let book = Book {title: "Rust Programming".to_string()};
+     println!("Created book: {}", book.title);
+ }
