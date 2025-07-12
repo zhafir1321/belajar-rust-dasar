@@ -1181,7 +1181,8 @@ fn test_string_manipulation() {
 use std::{
     collections::{BTreeMap, HashMap, HashSet, LinkedList, VecDeque},
     fmt::{Debug, Formatter},
-    iter, ops::Deref,
+    iter,
+    ops::Deref,
 };
 struct Category {
     id: String,
@@ -1651,7 +1652,7 @@ fn test_attribute_derive() {
     println!("Are the companies equal? {}", result); // This will print true if the companies are equal, false otherwise
 }
 
-/* 
+/*
 
 Smart Pointer Box<T>
 Reference = Pointer
@@ -1681,26 +1682,25 @@ fn display_number_reference(value: &i32) {
 #[derive(Debug)]
 enum ProductCategory {
     Of(String, Box<ProductCategory>),
-    End
+    End,
 }
 
 #[test]
 fn test_box_enum() {
     let category = ProductCategory::Of(
-        "Laptop".to_string(), 
+        "Laptop".to_string(),
         Box::new(ProductCategory::Of(
-            "Dell".to_string(), 
-            Box::new(ProductCategory::End)
-        ))
+            "Dell".to_string(),
+            Box::new(ProductCategory::End),
+        )),
     );
 
     println!("{:?}", category);
 }
 
-
 /**
  * DEREFERENCE
- * 
+ *
  * Saat kita menggunakan Reference, kadang kita ingin melakukan manipulasi data langsung ke value nya
  * Kita bisa melakukan Dereference untuk mengakses langsung value-nya, bukan lagi Reference-nya
  * Untuk melakukan Dereference, kita bisa menggunakan operator *
@@ -1717,7 +1717,7 @@ fn test_dereference() {
 
 /**
  * DEREF TRAIT
- * 
+ *
  * Saat kita menggunakan Reference atau Box<T>, kita bisa menggunakan * Operator untuk melakukan Dereference
  * Bagaimana jika kita menggunakan tipe lain? Misal struct yang kita buat sendiri?
  * Secara default, kita tidak bisa menggunakan Dereference
@@ -1725,22 +1725,21 @@ fn test_dereference() {
  * Khusus untuk Mutable Value, kita juga bisa menggunakan DerefMut
  */
 
- struct MyValue<T> {
-    value: T
- }
+struct MyValue<T> {
+    value: T,
+}
 
- impl<T> Deref for MyValue<T> {
+impl<T> Deref for MyValue<T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
         &self.value
     }
-
- }
+}
 
 #[test]
 fn test_derefence_struct() {
-    let value = MyValue {value: 10};
+    let value = MyValue { value: 10 };
     let real_value = *value;
 
     println!("{}", real_value)
@@ -1748,43 +1747,84 @@ fn test_derefence_struct() {
 
 /**
  * DEREF PARAMETER
- * 
+ *
  * Deref juga bisa digunakan untuk Parameter yang secara otomatis melakukan Reference ke value yang ditunjuk pada implementasi yang kita buat
  * Misal sebelumnya kita membuat MyValue<String>, lalu misal kita ingin mengirim ke function dengan parameter &String
  * Kita bisa langsung menggunakan &my_value
  */
 
- fn say_hello_reference(name: &String) {
+fn say_hello_reference(name: &String) {
     println!("Hello {}", name)
- }
+}
 
- #[test]
- fn test_deref_reference() {
-     let name = MyValue {value: "Zhafir Rasyid Muhammad Hafidz".to_string()};
+#[test]
+fn test_deref_reference() {
+    let name = MyValue {
+        value: "Zhafir Rasyid Muhammad Hafidz".to_string(),
+    };
 
-     say_hello_reference(&name);
- }
+    say_hello_reference(&name);
+}
 
 /**
  * DROP TRAIT
- * 
+ *
  * Saat kita membuat value, ketika value tersebut keluar dari scope, secara otomatis value akan didrop (hapus) oleh Rust
  * Drop Trait merupakan Trait yang bisa kita implementasikan, untuk membuat kode yang akan dieksekusi sebelum value didrop
  * Misal menutup koneksi, resource dan lain lain
  */
 
- struct Book {
-    title: String
- }
+struct Book {
+    title: String,
+}
 
- impl Drop for Book {
+impl Drop for Book {
     fn drop(&mut self) {
         println!("Dropping book: {}", self.title);
     }
- }
+}
 
- #[test]
- fn test_drop() {
-     let book = Book {title: "Rust Programming".to_string()};
-     println!("Created book: {}", book.title);
- }
+#[test]
+fn test_drop() {
+    let book = Book {
+        title: "Rust Programming".to_string(),
+    };
+    println!("Created book: {}", book.title);
+}
+
+/**
+ * MULTIPLE OWNERSHIP
+ *
+ * Pada umumnya, value biasanya hanya dimiliki oleh satu variable
+ * Namun, mungkin ada kasus dimana satu value dimiliki oleh beberapa variable
+ * Contoh:
+ *  Pada struktur data Graph, dimana satu titik bisa berasal dari beberapa titik
+ *
+ * Seperti yang kita tahu, bahwa defaultnya di Rust satu value hanya bisa dimiliki oleh satu variable
+ * Jika kita ingin membuat satu value bisa dimiliki oleh beberapa variable, kita harus menggunakan type Rc<T> (Reference Counted)
+ *
+ * Rc<T>
+ * Rc<T> atau Reference Counted adalah tipe data Smart Pointer yang bisa digunakan untuk lebih dari satu variable owner
+ * Penggunaan Rc<T> mirip seperti Box<T>
+ */
+use ::std::rc::Rc;
+
+enum Brand {
+    Of(String, Rc<Brand>),
+    End,
+}
+
+#[test]
+fn test_multiple_ownership() {
+    let apple: Rc<Brand> = Rc::new(Brand::Of("Apple".to_string(), Rc::new(Brand::End)));
+
+    println!("Apple Reference Count: {}", Rc::strong_count(&apple));
+
+    let laptop: Brand = Brand::Of("Laptop".to_string(), Rc::clone(&apple));
+
+    println!("Apple Reference Count: {}", Rc::strong_count(&apple));
+
+    let smartphone: Brand = Brand::Of("Smartphone".to_string(), Rc::clone(&apple));
+
+    println!("Apple Reference Count: {}", Rc::strong_count(&apple))
+}
